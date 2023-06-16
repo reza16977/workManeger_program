@@ -1,0 +1,76 @@
+﻿<Window x:Class="FinalExam.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:FinalExam.ViewModel"
+        xmlns:helper ="clr-namespace:FinalExam.Helper"
+        xmlns:local="clr-namespace:FinalExam"
+        mc:Ignorable="d"
+        Title="Work Manager" Height="543.861" Width="748.422">
+    <Window.DataContext>
+        <vm:MainWindowViewModel/>
+    </Window.DataContext>
+    <Window.Resources>
+        <helper:StatusConverter x:Key="statusConverter"/>
+        <helper:TotalConverter x:Key="totalConverter"/>
+        <helper:DateConverter x:Key="dateConverter"/>
+    </Window.Resources>
+    <Grid>
+        <ListBox x:Name="listBox" ItemsSource ="{Binding Works}" SelectedItem="{Binding SelectedWork}" HorizontalAlignment="Left" Height="379" Margin="59,73,0,0" VerticalAlignment="Top" Width="339">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Vertical">
+                        <StackPanel Orientation="Horizontal">
+                            <Border x:Name ="border"  Width="40">
+                                <Ellipse Fill="{Binding Path=Status, Converter={StaticResource statusConverter}}" Width="20" Height="20" />
+                            </Border>
+                            <StackPanel Orientation="Vertical">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="업무명 : "/>
+                                    <TextBlock Text="{Binding Title}" Width= "100"/>
+                                    <TextBlock Text="담당자 : "/>
+                                    <TextBlock Text="{Binding Manager}" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="업무내용 : "/>
+                                    <TextBlock Text="{Binding Description}" Width="200"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="시작 : "/>
+                                    <TextBlock Text="{Binding StartDate, Converter={StaticResource dateConverter}}" Width="80"/>
+                                    <TextBlock Text="종료 : "/>
+                                    <TextBlock Text="{Binding EndDate, Converter={StaticResource dateConverter}}" Width="80"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="진행기간 : "/>
+                                    <Grid>
+                                        <ProgressBar Foreground="Blue"  Background="Red" VerticalAlignment="Center" Maximum="100" Height="12"  Width="80" Value="{Binding CurrentPeriodRate}"/>
+                                        <TextBlock Text="{Binding CurrentPeriodRate}" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="10" Foreground="White"/>
+                                    </Grid>
+                                    <TextBlock Text="  "/>
+                                    <TextBlock Text="진행률 : "/>
+                                    <Grid>
+                                        <ProgressBar Foreground="Blue"  Background="Red" VerticalAlignment="Center" Maximum="100" Height="12"  Width="80" Value="{Binding ProgressRate}"/>
+                                        <TextBlock Text="{Binding ProgressRate}" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="10" Foreground="White"/>
+                                    </Grid>
+                                </StackPanel>
+                            </StackPanel>
+                        </StackPanel>
+                        <Border Height="2" Width="{Binding ElementName=listBox, Path=Width}" Background="Blue"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <Label x:Name="labelName" Content="이름" HorizontalAlignment="Left" Margin="437,61,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="textBoxName" HorizontalAlignment="Left" Height="21" Margin="437,92,0,0" TextWrapping="Wrap" Text="{Binding SearchName}" VerticalAlignment="Top" Width="133"/>
+        <Button x:Name="buttonSearch" Command="{Binding Search }" Content="Search" HorizontalAlignment="Left" Height="21" Margin="588,92,0,0" VerticalAlignment="Top" Width="105"/>
+        <Button x:Name="button" Content="Reset" Command="{Binding Reset}" HorizontalAlignment="Left" Height="24" Margin="588,142,0,0" VerticalAlignment="Top" Width="105"/>
+
+        <Label x:Name="labelTotalValue" Content="{Binding Works, Converter={StaticResource totalConverter}}" HorizontalAlignment="Left" Margin="367,49,0,0" VerticalAlignment="Top" Width="17"/>
+        <Label x:Name="labelTotal" Content="Total :" HorizontalAlignment="Left" Margin="323,49,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="labelProgressRate" Content="진행률" HorizontalAlignment="Left" Height="30" Margin="431,314,0,0" VerticalAlignment="Top" Width="89"/>
+        <TextBox x:Name="textBoxProgressRate" HorizontalAlignment="Left" Height="20" Margin="436,339,0,0" TextWrapping="Wrap" Text="{Binding SelectedProgressRate}" VerticalAlignment="Top" Width="57"/>
+        <Button x:Name="buttonModify" Content="Modify" Command="{Binding Modify }" HorizontalAlignment="Left" Height="20" Margin="520,339,0,0" VerticalAlignment="Top" Width="90"/>
+    </Grid>
+</Window>
